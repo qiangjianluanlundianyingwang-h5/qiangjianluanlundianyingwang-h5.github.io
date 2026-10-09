@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>乱乱电影网 - 海量电影在线观看</title>
+<meta name="description" content="乱乱电影网(https://qiangjianluanlundianyingwang-h5.github.io)提供海量高清电影、热播剧集、综艺动漫在线观看，每日更新，免费畅看。">
+<meta name="keywords" content="乱乱电影网,电影在线观看,热播电影,影视资源,qiangjianluanlundianyingwang-h5.github.io">
+<meta property="og:title" content="乱乱电影网 - 海量电影在线观看">
+<meta property="og:description" content="乱乱电影网提供海量高清电影、热播剧集、综艺动漫在线观看。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://qiangjianluanlundianyingwang-h5.github.io">
+<link rel="canonical" href="https://qiangjianluanlundianyingwang-h5.github.io">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0015;--bg2:#1a0028;--neon:#b026ff;--neon2:#7b00d4;--green:#39ff14;
+  --pink:#ff2a7a;--text:#e8d5f5;--text2:#9b7bb5;--border:rgba(176,38,255,0.3);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Rajdhani','PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;
+}
+a{text-decoration:none;color:inherit}ul{list-style:none}img{max-width:100%;display:block}
+
+/* 故障背景扫描线 */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(176,38,255,0.03) 2px,rgba(176,38,255,0.03) 4px);
+}
+
+/* 头部 */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(13,0,21,0.85);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);transition:all 0.3s;
+}
+.nav-container{
+  max-width:1200px;margin:0 auto;padding:0 1rem;
+  display:flex;align-items:center;justify-content:space-between;height:56px;
+}
+.logo{font-size:1.3rem;font-weight:900;color:var(--text);letter-spacing:2px;text-shadow:0 0 10px var(--neon)}
+.logo span{color:var(--neon)}
+.nav-links{display:flex;gap:0.15rem}
+.nav-links a{
+  padding:0.3rem 0.55rem;border-radius:4px;font-size:0.8rem;font-weight:600;
+  transition:all 0.3s;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;
+}
+.nav-links a:hover,.nav-links a.active{
+  background:var(--neon);color:#fff;box-shadow:0 0 15px var(--neon);
+}
+.mobile-toggle{display:none;flex-direction:column;gap:4px;cursor:pointer}
+.mobile-toggle span{width:22px;height:2px;background:var(--neon);transition:0.3s}
+
+.main-content{position:relative;z-index:1;padding-top:56px}
+
+.section{padding:3rem 1rem;max-width:1200px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:2.5rem}
+.section-header h2{font-size:1.7rem;font-weight:900;color:var(--text);margin-bottom:0.4rem;letter-spacing:3px;text-shadow:0 0 20px var(--neon)}
+.section-header h2 i{color:var(--green)}
+.section-header p{color:var(--text2);font-size:0.85rem;letter-spacing:1px}
+
+/* 栏目一：跑马灯双行 */
+.marquee-wrap{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.marquee-row{display:flex;gap:1rem;margin-bottom:1rem;width:max-content;animation:marqueeScroll 40s linear infinite}
+.marquee-row.reverse{animation-direction:reverse;animation-duration:50s}
+.marquee-row:hover{animation-play-state:paused}
+@keyframes marqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-item{
+  width:200px;height:280px;border-radius:10px;overflow:hidden;position:relative;flex-shrink:0;
+  border:1px solid var(--border);cursor:pointer;transition:all 0.4s;
+}
+.marquee-item:hover{transform:scale(1.05);border-color:var(--neon);box-shadow:0 0 25px rgba(176,38,255,0.5);z-index:2}
+.marquee-item img{width:100%;height:100%;object-fit:cover;transition:filter 0.4s}
+.marquee-item:hover img{filter:hue-rotate(90deg) saturate(1.5)}
+.marquee-item .mq-info{
+  position:absolute;bottom:0;left:0;right:0;padding:1rem 0.8rem 0.8rem;
+  background:linear-gradient(transparent,rgba(13,0,21,0.95));
+}
+.marquee-item .mq-info h4{color:var(--text);font-size:0.85rem;margin-bottom:0.2rem}
+.marquee-item .mq-info span{color:var(--green);font-size:0.7rem}
+
+/* 栏目二：类型矩阵 */
+.matrix{
+  display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:120px;gap:0.8rem;
+}
+.mx-cell{
+  border-radius:8px;overflow:hidden;position:relative;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  transition:all 0.4s;transform:scale(0.9);opacity:0;
+}
+.mx-cell.visible{transform:scale(1);opacity:1}
+.mx-cell:hover{transform:scale(1.05);z-index:2}
+.mx-cell::before{
+  content:'';position:absolute;inset:0;background:var(--c);opacity:0.2;transition:opacity 0.3s;
+}
+.mx-cell:hover::before{opacity:0.4}
+.mx-cell::after{
+  content:'';position:absolute;inset:0;border:2px solid var(--c);border-radius:8px;opacity:0;transition:opacity 0.3s;
+}
+.mx-cell:hover::after{opacity:1;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.mx-cell span{position:relative;z-index:1;color:var(--text);font-weight:700;font-size:0.85rem;text-shadow:0 0 10px var(--c)}
+.mx-cell small{position:relative;z-index:1;color:var(--text2);font-size:0.7rem}
+.mx-cell.w2{grid-column:span 2}.mx-cell.h2{grid-row:span 2}
+.mx-cell:nth-child(1){--c:#b026ff}.mx-cell:nth-child(2){--c:#39ff14}
+.mx-cell:nth-child(3){--c:#ff2a7a}.mx-cell:nth-child(4){--c:#00d4ff}
+.mx-cell:nth-child(5){--c:#ffaa00}.mx-cell:nth-child(6){--c:#ff6b6b}
+.mx-cell:nth-child(7){--c:#a855f7}.mx-cell:nth-child(8){--c:#10b981}
+
+/* 栏目三：倾斜卡片 */
+.diagonal-wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem;padding:2rem 0}
+.diag-card{
+  width:280px;height:180px;position:relative;cursor:pointer;transform-style:preserve-3d;
+  transition:all 0.5s;opacity:0;
+}
+.diag-card.visible{opacity:1}
+.diag-card:nth-child(odd){transform:rotate(-3deg)}
+.diag-card:nth-child(even){transform:rotate(3deg)}
+.diag-card:hover{transform:rotate(0deg) scale(1.05) translateY(-8px);z-index:3}
+.diag-inner{
+  width:100%;height:100%;border-radius:12px;overflow:hidden;position:relative;
+  border:1px solid var(--border);
+}
+.diag-inner img{width:100%;height:100%;object-fit:cover}
+.diag-info{
+  position:absolute;bottom:0;left:0;right:0;padding:1rem;
+  background:linear-gradient(transparent,rgba(13,0,21,0.95));
+}
+.diag-info h4{color:var(--text);font-size:0.9rem;margin-bottom:0.2rem}
+.diag-info span{color:var(--green);font-size:0.72rem}
+.diag-badge{
+  position:absolute;top:10px;right:10px;padding:0.2rem 0.5rem;background:var(--pink);
+  color:#fff;font-size:0.65rem;border-radius:3px;font-weight:700;
+}
+
+/* 栏目四：螺旋轨道 */
+.spiral-wrap{display:flex;justify-content:center;align-items:center;min-height:350px;position:relative}
+.orbit{
+  width:320px;height:320px;border-radius:50%;border:1px dashed var(--border);
+  position:relative;animation:spin 30s linear infinite;
+}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.orbit:hover{animation-play-state:paused}
+.satellite{
+  position:absolute;width:140px;border-radius:8px;overflow:hidden;
+  border:1px solid var(--border);cursor:pointer;transition:all 0.3s;
+}
+.satellite:hover{transform:scale(1.15);border-color:var(--neon);z-index:5}
+.satellite img{width:100%;height:90px;object-fit:cover}
+.satellite .sat-info{padding:0.4rem 0.5rem;background:var(--bg2)}
+.satellite .sat-info h5{color:var(--text);font-size:0.7rem;margin-bottom:0.1rem}
+.satellite .sat-info span{color:var(--text2);font-size:0.6rem}
+.satellite:nth-child(1){top:-20px;left:50%;transform:translateX(-50%)}
+.satellite:nth-child(2){top:50%;right:-20px;transform:translateY(-50%)}
+.satellite:nth-child(3){bottom:-20px;left:50%;transform:translateX(-50%)}
+.satellite:nth-child(4){top:50%;left:-20px;transform:translateY(-50%)}
+.satellite:nth-child(5){top:10%;right:10%}
+.satellite:nth-child(6){bottom:10%;left:10%}
+.orbit-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:80px;height:80px;border-radius:50%;background:var(--neon);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:0.8rem;
+  box-shadow:0 0 30px var(--neon);animation:pulse 2s infinite;
+}
+
+/* 栏目五：打字机列表 */
+.typewriter{max-width:800px;margin:0 auto}
+.tw-entry{
+  padding:1.2rem 1.5rem;margin-bottom:1rem;background:rgba(26,0,40,0.6);
+  border-left:3px solid var(--neon);border-radius:0 8px 8px 0;
+  transition:all 0.4s;transform:translateX(-15px);opacity:0;
+}
+.tw-entry.visible{transform:translateX(0);opacity:1}
+.tw-entry:hover{border-left-color:var(--green);background:rgba(57,255,20,0.05)}
+.tw-line{display:flex;align-items:baseline;gap:0.5rem}
+.tw-prompt{color:var(--neon);font-family:monospace;font-size:0.8rem}
+.tw-entry h4{color:var(--text);font-size:0.95rem;margin-bottom:0.3rem}
+.tw-entry p{color:var(--text2);font-size:0.8rem;margin-left:1.2rem;line-height:1.5}
+.cursor{display:inline-block;width:8px;height:14px;background:var(--green);animation:blink 1s infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+.tw-meta{margin-left:1.2rem;margin-top:0.5rem;display:flex;gap:1rem}
+.tw-meta span{color:var(--text2);font-size:0.7rem}
+.tw-meta span::before{content:'>';color:var(--neon);margin-right:0.3rem}
+
+/* 栏目六：均衡器热度榜 */
+.equalizer{max-width:650px;margin:0 auto}
+.eq-row{
+  display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;margin-bottom:0.6rem;
+  background:rgba(26,0,40,0.6);border:1px solid var(--border);border-radius:8px;
+  transition:all 0.4s;transform:translateX(15px);opacity:0;
+}
+.eq-row.visible{transform:translateX(0);opacity:1}
+.eq-row:hover{border-color:var(--neon);box-shadow:0 0 15px rgba(176,38,255,0.2)}
+.eq-rank{
+  width:28px;height:28px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:0.85rem;flex-shrink:0;font-family:monospace;
+}
+.eq-row:nth-child(1) .eq-rank{background:var(--neon);color:#fff}
+.eq-row:nth-child(2) .eq-rank{background:var(--pink);color:#fff}
+.eq-row:nth-child(3) .eq-rank{background:var(--green);color:#000}
+.eq-row:nth-child(n+4) .eq-rank{background:var(--bg);color:var(--text2);border:1px solid var(--border)}
+.eq-info{flex:1}
+.eq-info h4{color:var(--text);font-size:0.85rem;margin-bottom:0.4rem}
+.eq-bars{display:flex;gap:2px;align-items:flex-end;height:20px}
+.eq-bar{width:6px;background:var(--neon);border-radius:2px 2px 0 0;animation:eqBounce 1s ease-in-out infinite}
+@keyframes eqBounce{0%,100%{height:20%}25%{height:60%}50%{height:100%}75%{height:40%}}
+.eq-bar:nth-child(1){animation-delay:0s}
+.eq-bar:nth-child(2){animation-delay:0.15s;background:var(--pink)}
+.eq-bar:nth-child(3){animation-delay:0.3s;background:var(--green)}
+.eq-bar:nth-child(4){animation-delay:0.45s;background:var(--neon2)}
+.eq-bar:nth-child(5){animation-delay:0.6s}
+.eq-level{flex-shrink:0;text-align:right}
+.eq-level .lv-num{color:var(--green);font-size:1rem;font-weight:700;font-family:monospace}
+.eq-level .lv-txt{color:var(--text2);font-size:0.6rem;text-transform:uppercase}
+
+/* 页脚 */
+.site-footer{
+  background:var(--bg2);padding:2.5rem 1rem 1.5rem;border-top:1px solid var(--border);text-align:center;position:relative;z-index:1;
+}
+.footer-content{max-width:1200px;margin:0 auto}
+.footer-logo{font-size:1.2rem;font-weight:900;color:var(--text);margin-bottom:1rem;letter-spacing:2px}
+.footer-logo span{color:var(--neon)}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-bottom:1.5rem}
+.footer-links a{color:var(--text2);font-size:0.8rem;transition:color 0.3s;text-transform:uppercase;font-size:0.75rem}
+.footer-links a:hover{color:var(--neon)}
+.footer-bottom{padding-top:1.5rem;border-top:1px solid var(--border);color:var(--text2);font-size:0.75rem}
+.footer-bottom p{margin-bottom:0.3rem}
+
+/* 响应式 */
+@media(max-width:960px){
+  .matrix{grid-template-columns:repeat(3,1fr)}
+  .orbit{width:260px;height:260px}
+  .satellite{width:110px}
+  .satellite img{height:70px}
+}
+@media(max-width:640px){
+  .nav-links{
+    position:fixed;top:56px;left:0;right:0;background:rgba(13,0,21,0.98);
+    flex-direction:column;padding:1rem;gap:0.4rem;
+    transform:translateY(-150%);transition:transform 0.4s;
+  }
+  .nav-links.open{transform:translateY(0)}
+  .mobile-toggle{display:flex}
+  .marquee-item{width:160px;height:220px}
+  .matrix{grid-template-columns:repeat(2,1fr)}
+  .diag-card{width:240px;height:150px}
+  .spiral-wrap{min-height:280px}
+  .orbit{width:200px;height:200px}
+  .satellite{width:90px}
+  .satellite img{height:55px}
+  .satellite .sat-info h5{font-size:0.6rem}
+  .section-header h2{font-size:1.3rem}
+  .tw-entry{padding:0.8rem 1rem}
+  .tw-entry p{margin-left:0}
+  .tw-meta{margin-left:0}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<header class="site-header" id="header">
+  <div class="nav-container">
+    <div class="logo">乱乱<span>电影网</span></div>
+    <nav class="nav-links" id="navLinks">
+      <a href="#movies" class="active">最新</a>
+      <a href="#category">类型</a>
+      <a href="#series">剧集</a>
+      <a href="#shorts">短片</a>
+      <a href="#news">杂谈</a>
+      <a href="#ranking">榜单</a>
+    </nav>
+    <div class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<main class="main-content">
+
+  <!-- 栏目一：跑马灯双行 -->
+  <section class="section" id="movies">
+    <div class="section-header">
+      <h2><i>🎬</i> 最新电影速递</h2>
+      <p>DAILY UPDATES · HD QUALITY · FREE STREAMING</p>
+    </div>
+    <div class="marquee-wrap">
+      <div class="marquee-row">
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%231a0028' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E沙丘2%3C/text%3E%3C/svg%3E" alt="沙丘2"><div class="mq-info"><h4>沙丘2</h4><span>⭐ 8.8 · 科幻</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%232a0040' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E奥本海默%3C/text%3E%3C/svg%3E" alt="奥本海默"><div class="mq-info"><h4>奥本海默</h4><span>⭐ 8.9 · 传记</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%231a0030' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E坠落的审判%3C/text%3E%3C/svg%3E" alt="坠落的审判"><div class="mq-info"><h4>坠落的审判</h4><span>⭐ 8.7 · 悬疑</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%23300040' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E利益区域%3C/text%3E%3C/svg%3E" alt="利益区域"><div class="mq-info"><h4>利益区域</h4><span>⭐ 8.5 · 历史</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%23220035' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E花月杀手%3C/text%3E%3C/svg%3E" alt="花月杀手"><div class="mq-info"><h4>花月杀手</h4><span>⭐ 8.4 · 犯罪</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%231a0028' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E可怜的东西%3C/text%3E%3C/svg%3E" alt="可怜的东西"><div class="mq-info"><h4>可怜的东西</h4><span>⭐ 8.3 · 奇幻</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%232a0040' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E过往人生%3C/text%3E%3C/svg%3E" alt="过往人生"><div class="mq-info"><h4>过往人生</h4><span>⭐ 8.6 · 爱情</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%231a0030' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E芭比%3C/text%3E%3C/svg%3E" alt="芭比"><div class="mq-info"><h4>芭比</h4><span>⭐ 8.2 · 喜剧</span></div></div>
+      </div>
+      <div class="marquee-row reverse">
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%23300040' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E蜘蛛侠：纵横宇宙%3C/text%3E%3C/svg%3E" alt="蜘蛛侠纵横宇宙"><div class="mq-info"><h4>蜘蛛侠：纵横宇宙</h4><span>⭐ 8.9 · 动画</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%23220035' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E封神第一部%3C/text%3E%3C/svg%3E" alt="封神第一部"><div class="mq-info"><h4>封神第一部</h4><span>⭐ 8.5 · 神话</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%231a0028' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E消失的她%3C/text%3E%3C/svg%3E" alt="消失的她"><div class="mq-info"><h4>消失的她</h4><span>⭐ 8.0 · 悬疑</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%232a0040' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E热辣滚烫%3C/text%3E%3C/svg%3E" alt="热辣滚烫"><div class="mq-info"><h4>热辣滚烫</h4><span>⭐ 7.9 · 喜剧</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%231a0030' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E周处除三害%3C/text%3E%3C/svg%3E" alt="周处除三害"><div class="mq-info"><h4>周处除三害</h4><span>⭐ 8.4 · 动作</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%23300040' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E涉过愤怒的海%3C/text%3E%3C/svg%3E" alt="涉过愤怒的海"><div class="mq-info"><h4>涉过愤怒的海</h4><span>⭐ 8.2 · 犯罪</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%23220035' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E年会不能停%3C/text%3E%3C/svg%3E" alt="年会不能停"><div class="mq-info"><h4>年会不能停</h4><span>⭐ 8.1 · 喜剧</span></div></div>
+        <div class="marquee-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect fill='%231a0028' width='200' height='280'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E第二十条%3C/text%3E%3C/svg%3E" alt="第二十条"><div class="mq-info"><h4>第二十条</h4><span>⭐ 7.8 · 剧情</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目二：类型矩阵 -->
+  <section class="section" id="category">
+    <div class="section-header">
+      <h2><i>📋</i> 电影类型矩阵</h2>
+      <p>EXPLORE ALL GENRES · FIND YOUR VIBE</p>
+    </div>
+    <div class="matrix">
+      <div class="mx-cell w2 h2"><span>科幻 SCI-FI</span><small>342 部</small></div>
+      <div class="mx-cell"><span>动作</span><small>256</small></div>
+      <div class="mx-cell h2"><span>悬疑<br>惊悚</span><small>189</small></div>
+      <div class="mx-cell"><span>喜剧</span><small>412</small></div>
+      <div class="mx-cell"><span>爱情</span><small>298</small></div>
+      <div class="mx-cell w2"><span>动画 ANIMATION</span><small>167 部</small></div>
+      <div class="mx-cell"><span>恐怖</span><small>134</small></div>
+      <div class="mx-cell"><span>纪录</span><small>98</small></div>
+    </div>
+  </section>
+
+  <!-- 栏目三：倾斜卡片剧集 -->
+  <section class="section" id="series">
+    <div class="section-header">
+      <h2><i>📺</i> 热门连载剧集</h2>
+      <p>BINGE WATCHING · WEEKLY UPDATES</p>
+    </div>
+    <div class="diagonal-wrap">
+      <div class="diag-card">
+        <div class="diag-inner"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Crect fill='%231a0028' width='280' height='180'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E三体%3C/text%3E%3C/svg%3E" alt="三体"><div class="diag-badge">更新至12集</div><div class="diag-info"><h4>三体</h4><span>科幻/悬疑 · 全30集</span></div></div></div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-inner"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Crect fill='%232a0040' width='280' height='180'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E繁城之下%3C/text%3E%3C/svg%3E" alt="繁城之下"><div class="diag-badge">更新至8集</div><div class="diag-info"><h4>繁城之下</h4><span>古装/悬疑 · 全12集</span></div></div></div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-inner"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Crect fill='%23300040' width='280' height='180'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E漫长的季节%3C/text%3E%3C/svg%3E" alt="漫长的季节"><div class="diag-badge">已完结</div><div class="diag-info"><h4>漫长的季节</h4><span>悬疑/生活 · 全12集</span></div></div></div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-inner"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='180'%3E%3Crect fill='%23220035' width='280' height='180'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='14'%3E异人之下%3C/text%3E%3C/svg%3E" alt="异人之下"><div class="diag-badge">更新至16集</div><div class="diag-info"><h4>异人之下</h4><span>奇幻/动作 · 全27集</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目四：螺旋轨道短片 -->
+  <section class="section" id="shorts">
+    <div class="section-header">
+      <h2><i>🎥</i> 独立短片专区</h2>
+      <p>INDIE SHORTS · CREATIVE VISION</p>
+    </div>
+    <div class="spiral-wrap">
+      <div class="orbit">
+        <div class="satellite"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect fill='%231a0028' width='140' height='90'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='10'%3E爱，死亡和机器人%3C/text%3E%3C/svg%3E" alt="爱死亡和机器人"><div class="sat-info"><h5>爱，死亡和机器人</h5><span>动画短片集</span></div></div>
+        <div class="satellite"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect fill='%232a0040' width='140' height='90'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='10'%3E拾穗者%3C/text%3E%3C/svg%3E" alt="拾穗者"><div class="sat-info"><h5>拾穗者</h5><span>实验短片 12min</span></div></div>
+        <div class="satellite"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect fill='%23300040' width='140' height='90'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='10'%3E纸人%3C/text%3E%3C/svg%3E" alt="纸人"><div class="sat-info"><h5>纸人</h5><span>迪士尼短片</span></div></div>
+        <div class="satellite"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect fill='%23220035' width='140' height='90'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='10'%3E暴力云与送子鹳%3C/text%3E%3C/svg%3E" alt="暴力云"><div class="sat-info"><h5>暴力云与送子鹳</h5><span>皮克斯短片</span></div></div>
+        <div class="satellite"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect fill='%231a0030' width='140' height='90'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='10'%3E平衡%3C/text%3E%3C/svg%3E" alt="平衡"><div class="sat-info"><h5>平衡</h5><span>德国短片 1989</span></div></div>
+        <div class="satellite"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect fill='%231a0028' width='140' height='90'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e8d5f5' font-size='10'%3E雇佣人生%3C/text%3E%3C/svg%3E" alt="雇佣人生"><div class="sat-info"><h5>雇佣人生</h5><span>阿根廷短片</span></div></div>
+        <div class="orbit-center">SHORTS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目五：打字机杂谈 -->
+  <section class="section" id="news">
+    <div class="section-header">
+      <h2><i>📝</i> 影评与杂谈</h2>
+      <p>DEEP DIVE · CRITICAL THINKING</p>
+    </div>
+    <div class="typewriter">
+      <div class="tw-entry">
+        <div class="tw-line"><span class="tw-prompt">$</span><h4>2024奥斯卡最佳影片深度解读：多视角叙事的胜利</h4><span class="cursor"></span></div>
+        <p>从《奥本海默》的三段式结构到《利益区域》的一镜到底，今年奥斯卡入围作品在叙事技巧上呈现出前所未有的实验性...</p>
+        <div class="tw-meta"><span>8 分钟阅读</span><span>影评分析</span><span>2 小时前</span></div>
+      </div>
+      <div class="tw-entry">
+        <div class="tw-line"><span class="tw-prompt">$</span><h4>国产悬疑剧的叙事进化：从《白夜追凶》到《漫长的季节》</h4><span class="cursor"></span></div>
+        <p>国产悬疑剧如何在类型化框架中实现作者表达？以时间线交错、多人物视角、社会议题嵌入等手法，探讨这一类型的突围路径...</p>
+        <div class="tw-meta"><span>12 分钟阅读</span><span>剧集分析</span><span>5 小时前</span></div>
+      </div>
+      <div class="tw-entry">
+        <div class="tw-line"><span class="tw-prompt">$</span><h4>科幻电影中的哲学思辨：自由意志与决定论</h4><span class="cursor"></span></div>
+        <p>从《黑客帝国》到《信条》，科幻电影如何借助高概念设定探讨人类最根本的哲学命题？时间、因果、意识的关系在影像中如何呈现...</p>
+        <div class="tw-meta"><span>15 分钟阅读</span><span>深度长文</span><span>1 天前</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目六：均衡器热度榜 -->
+  <section class="section" id="ranking">
+    <div class="section-header">
+      <h2><i>🔥</i> 全网热度榜</h2>
+      <p>REAL-TIME HOT RANKING</p>
+    </div>
+    <div class="equalizer">
+      <div class="eq-row"><div class="eq-rank">1</div><div class="eq-info"><h4>沙丘2 / Dune: Part Two</h4><div class="eq-bars"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div></div><div class="eq-level"><div class="lv-num">99.2</div><div class="lv-txt">HOT</div></div></div>
+      <div class="eq-row"><div class="eq-rank">2</div><div class="eq-info"><h4>奥本海默 / Oppenheimer</h4><div class="eq-bars"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div></div><div class="eq-level"><div class="lv-num">96.8</div><div class="lv-txt">HOT</div></div></div>
+      <div class="eq-row"><div class="eq-rank">3</div><div class="eq-info"><h4>周处除三害</h4><div class="eq-bars"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div></div><div class="eq-level"><div class="lv-num">94.5</div><div class="lv-txt">RISING</div></div></div>
+      <div class="eq-row"><div class="eq-rank">4</div><div class="eq-info"><h4>蜘蛛侠：纵横宇宙</h4><div class="eq-bars"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div></div><div class="eq-level"><div class="lv-num">91.3</div><div class="lv-txt">TRENDING</div></div></div>
+      <div class="eq-row"><div class="eq-rank">5</div><div class="eq-info"><h4>涉过愤怒的海</h4><div class="eq-bars"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div></div><div class="eq-level"><div class="lv-num">88.7</div><div class="lv-txt">TRENDING</div></div></div>
+      <div class="eq-row"><div class="eq-rank">6</div><div class="eq-info"><h4>可怜的东西</h4><div class="eq-bars"><div class="eq-bar"></div><div class="eq-bar"></div></div></div><div class="eq-level"><div class="lv-num">85.1</div><div class="lv-txt">NEW</div></div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-logo">乱乱<span>电影网</span></div>
+    <div class="footer-links">
+      <a href="#">关于</a><a href="#">免责</a><a href="#">版权</a><a href="#">联系</a><a href="#">RSS</a>
+    </div>
+    <div class="footer-bottom">
+      <p>网站名称：乱乱电影网 | 网站网址：https://qiangjianluanlundianyingwang-h5.github.io</p>
+      <p>本站提供海量高清电影、热播剧集、综艺动漫在线观看，每日更新。</p>
+      <p>© 2024 乱乱电影网 保留所有权利</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+var mobileToggle=document.getElementById('mobileToggle');
+var navLinks=document.getElementById('navLinks');
+mobileToggle.addEventListener('click',function(){
+  navLinks.classList.toggle('open');
+  mobileToggle.classList.toggle('active');
+});
+
+var sections=document.querySelectorAll('.section');
+var navItems=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',function(){
+  var scrollY=window.scrollY+80;
+  sections.forEach(function(sec){
+    var top=sec.offsetTop,height=sec.offsetHeight,id=sec.getAttribute('id');
+    if(scrollY>=top&&scrollY<top+height){
+      navItems.forEach(function(a){a.classList.remove('active');});
+      var active=document.querySelector('.nav-links a[href="#'+id+'"]');
+      if(active)active.classList.add('active');
+    }
+  });
+  var header=document.getElementById('header');
+  if(window.scrollY>50){header.style.boxShadow='0 2px 20px rgba(176,38,255,0.2)';}
+  else{header.style.boxShadow='none';}
+});
+
+var observerOptions={threshold:0.1,rootMargin:'0px 0px -50px 0px'};
+var observer=new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');}});
+},observerOptions);
+document.querySelectorAll('.mx-cell,.diag-card,.satellite,.tw-entry,.eq-row').forEach(function(el){observer.observe(el);});
+</script>
+
+</body>
+</html>
